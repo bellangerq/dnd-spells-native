@@ -1,11 +1,9 @@
 {
   "expo": {
-    "name": "dnd-spell",
-    "slug": "dnd-spell",
+    "name": "dnd-spells-native",
+    "slug": "dnd-spells-native",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   },
-  "name": "dnd-spell"
+  "name": "dnd-spells-native"
 }
