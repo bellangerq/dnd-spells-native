@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, Button, View, ActivityIndicator } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  Button,
+  View,
+  ScrollView,
+  ActivityIndicator
+} from 'react-native'
 
 import themeColor from '../utils/themeColor'
 
@@ -91,7 +98,7 @@ export default function Spell({ spellIndexes }) {
   }
 
   return (
-    <View>
+    <ScrollView style={styles.container}>
       <Text style={styles.heading}>
         Discover a random D&D fifth edition spell...
       </Text>
@@ -112,11 +119,14 @@ export default function Spell({ spellIndexes }) {
       ) : spell ? (
         <SpellDetails {...spell} />
       ) : null}
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 16
+  },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
