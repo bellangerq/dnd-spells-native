@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "dnd-spell",
+    "slug": "dnd-spell",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "dnd-spell"
+}
