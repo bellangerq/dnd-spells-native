@@ -1,9 +1,22 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, Button, View, ActivityIndicator } from 'react-native'
 
 import themeColor from '../utils/themeColor'
 
-export default function Spell({
+function pluralize(number) {
+  switch (number) {
+    case 1:
+      return `${number}st`
+    case 2:
+      return `${number}nd`
+    case 1:
+      return `${number}rd`
+    default:
+      return `${number}th`
+  }
+}
+
+function SpellDetails({
   name,
   school,
   level,
@@ -14,29 +27,13 @@ export default function Spell({
   material,
   desc
 }) {
-  function pluralize(number) {
-    switch (number) {
-      case 1:
-        return `${number}st`
-      case 2:
-        return `${number}nd`
-      case 1:
-        return `${number}rd`
-      default:
-        return `${number}th`
-    }
-  }
-
   const spellLevel =
     level === 0
       ? `${school.name} cantrip`
       : `${pluralize(level)}-level` + ' ' + school.name.toLowerCase()
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.live} accessibilityLiveRegion="polite">
-        New spell fetched
-      </Text>
+    <View style={styles.details}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.level}>{spellLevel}</Text>
       <View style={styles.data}>
@@ -74,12 +71,56 @@ export default function Spell({
   )
 }
 
+export default function Spell({ spellIndexes }) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [spell, setSpell] = useState(null)
+
+  const handlePress = () => {
+    const randomIndex =
+      spellIndexes[Math.floor(Math.random() * spellIndexes.length)]
+
+    const url = `https://www.dnd5eapi.co/api/spells/${randomIndex}`
+    setIsLoading(true)
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((spell) => {
+        setSpell(spell)
+        setIsLoading(false)
+      })
+  }
+
+  return (
+    <View>
+      <Text style={styles.heading}>
+        Discover a random D&D fifth edition spell...
+      </Text>
+
+      <Button
+        disabled={isLoading}
+        title="Get a random spell"
+        onPress={handlePress}
+        color={themeColor}
+      />
+
+      <Text style={styles.live} accessibilityLiveRegion="polite">
+        New spell fetched
+      </Text>
+
+      {isLoading ? (
+        <ActivityIndicator marginTop={24} color={themeColor} size="large" />
+      ) : spell ? (
+        <SpellDetails {...spell} />
+      ) : null}
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
-  container: {
-    padding: 8,
-    borderWidth: 4,
-    borderColor: themeColor,
-    borderRadius: 2
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24
   },
   live: {
     height: 1,
@@ -87,9 +128,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 1
   },
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center'
+  details: {
+    borderWidth: 4,
+    borderColor: themeColor,
+    borderRadius: 2,
+    marginTop: 24,
+    padding: 8
   },
   level: {
     fontStyle: 'italic'
