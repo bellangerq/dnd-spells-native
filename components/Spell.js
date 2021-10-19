@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
 import themeColor from '../utils/themeColor'
 
@@ -81,6 +82,10 @@ function SpellDetails({
 export default function Spell({ spellIndexes }) {
   const [isLoading, setIsLoading] = useState(false)
   const [spell, setSpell] = useState(null)
+
+  // FIXME: prevent content to be overflown by tab bar
+  const tabBarHeight = useBottomTabBarHeight()
+  console.log(tabBarHeight)
 
   const handlePress = () => {
     const randomIndex =
