@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -79,28 +79,48 @@ function SpellDetails({
   )
 }
 
-export default function Spell({ spellIndexes }) {
+export default function Spell({
+  spellIndexes,
+  onSpellFetch,
+  historyIndex,
+  onResetHistorySpell
+}) {
   const [isLoading, setIsLoading] = useState(false)
   const [spell, setSpell] = useState(null)
 
   // FIXME: prevent content to be overflown by tab bar
-  const tabBarHeight = useBottomTabBarHeight()
-  console.log(tabBarHeight)
+  // const tabBarHeight = useBottomTabBarHeight()
+  // console.log(tabBarHeight)
 
-  const handlePress = () => {
-    const randomIndex =
-      spellIndexes[Math.floor(Math.random() * spellIndexes.length)]
+  const fetchSpell = (index) => {
+    const url = `https://www.dnd5eapi.co/api/spells/${index}`
 
-    const url = `https://www.dnd5eapi.co/api/spells/${randomIndex}`
     setIsLoading(true)
 
     fetch(url)
       .then((res) => res.json())
       .then((spell) => {
         setSpell(spell)
+        onSpellFetch(spell)
         setIsLoading(false)
+        onResetHistorySpell()
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
+
+  const handlePress = () => {
+    const index = spellIndexes[Math.floor(Math.random() * spellIndexes.length)]
+
+    fetchSpell(index)
+  }
+
+  useEffect(() => {
+    if (historyIndex) {
+      fetchSpell(historyIndex)
+    }
+  }, [historyIndex])
 
   return (
     <ScrollView style={styles.container}>

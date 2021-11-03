@@ -12,6 +12,26 @@ const Tab = createBottomTabNavigator()
 
 export default function App() {
   const [spellIndexes, setSpellIndexes] = useState([])
+  const [fetchedSpells, setFetchedSpells] = useState([])
+  const [historyIndex, setHistoryIndex] = useState(null)
+
+  const handleSpellFetch = (spell) => {
+    if (
+      fetchedSpells.length &&
+      fetchedSpells[fetchedSpells.length - 1].index === spell.index
+    )
+      return
+
+    setFetchedSpells([...fetchedSpells, spell])
+  }
+
+  const handleFetchHistory = (spellIndex) => {
+    setHistoryIndex(spellIndex)
+  }
+
+  const handleResetHistorySpell = () => {
+    setHistoryIndex(null)
+  }
 
   useEffect(() => {
     const url = 'https://www.dnd5eapi.co/api/spells'
@@ -39,7 +59,7 @@ export default function App() {
         >
           <Tab.Screen
             options={{
-              title: 'Random',
+              title: 'Spell',
               tabBarLabelStyle: { fontSize: 14 },
               tabBarIcon: ({ focused }) => (
                 <Feather
@@ -51,7 +71,14 @@ export default function App() {
             }}
             headerShown={false}
             name="Spell"
-            children={() => <Spell spellIndexes={spellIndexes} />}
+            children={() => (
+              <Spell
+                spellIndexes={spellIndexes}
+                onSpellFetch={handleSpellFetch}
+                historyIndex={historyIndex}
+                onResetHistorySpell={handleResetHistorySpell}
+              />
+            )}
           />
           <Tab.Screen
             options={{
@@ -66,7 +93,13 @@ export default function App() {
             }}
             headerShown={false}
             name="History"
-            component={History}
+            children={(props) => (
+              <History
+                spells={fetchedSpells}
+                onFetchHistory={handleFetchHistory}
+                {...props}
+              />
+            )}
           />
         </Tab.Navigator>
       </NavigationContainer>
