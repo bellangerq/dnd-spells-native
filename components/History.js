@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity
 } from 'react-native'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
 import themeColor from '../utils/themeColor'
 
@@ -15,8 +16,13 @@ export default function History({ spells, onFetchHistory, navigation }) {
     onFetchHistory(index)
   }
 
+  const tabBarHeight = useBottomTabBarHeight()
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: tabBarHeight }}
+      style={styles.container}
+    >
       <Text style={styles.heading}>History</Text>
       <View style={styles.list}>
         {spells.map((spell, i) => {

@@ -88,12 +88,14 @@ export default function Spell({
   const [isLoading, setIsLoading] = useState(false)
   const [spell, setSpell] = useState(null)
 
-  // FIXME: prevent content to be overflown by tab bar
-  // const tabBarHeight = useBottomTabBarHeight()
-  // console.log(tabBarHeight)
+  const tabBarHeight = useBottomTabBarHeight()
 
-  const fetchSpell = (index) => {
-    const url = `https://www.dnd5eapi.co/api/spells/${index}`
+  /**
+   * Fetch a spell based on its slug
+   * @param {string} slug
+   */
+  const fetchSpell = (slug) => {
+    const url = `https://www.dnd5eapi.co/api/spells/${slug}`
 
     setIsLoading(true)
 
@@ -123,7 +125,10 @@ export default function Spell({
   }, [historyIndex])
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: tabBarHeight }}
+      style={styles.container}
+    >
       <Text style={styles.heading}>
         Discover a random D&D fifth edition spell...
       </Text>
@@ -150,7 +155,9 @@ export default function Spell({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16
+    paddingTop: 16,
+    paddingRight: 16,
+    paddingLeft: 16
   },
   heading: {
     fontSize: 24,
