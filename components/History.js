@@ -1,5 +1,13 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from 'react-native'
+
+import themeColor from '../utils/themeColor'
 
 export default function History({ spells, onFetchHistory, navigation }) {
   const handlePress = (index) => {
@@ -10,16 +18,18 @@ export default function History({ spells, onFetchHistory, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.heading}>History</Text>
-      {spells.map((spell, i) => {
-        return (
-          <Text key={`${spell.index}-${i}`}>
-            • <Text>{spell.name}</Text>
-            <TouchableOpacity onPress={() => handlePress(spell.index)}>
-              <Text>Fetch this spell</Text>
-            </TouchableOpacity>
-          </Text>
-        )
-      })}
+      <View style={styles.list}>
+        {spells.map((spell, i) => {
+          return (
+            <View style={styles.listItemContainer} key={`${spell.index}-${i}`}>
+              <Text>•</Text>
+              <TouchableOpacity onPress={() => handlePress(spell.index)}>
+                <Text style={styles.listItem}>{spell.name}</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        })}
+      </View>
     </ScrollView>
   )
 }
@@ -32,5 +42,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 24
+  },
+  list: {
+    display: 'flex'
+  },
+  listItemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 4
+  },
+  listItem: {
+    fontSize: 18,
+    textDecorationLine: 'underline',
+    textDecorationColor: themeColor,
+    textDecorationStyle: 'solid',
+    marginLeft: 8
   }
 })

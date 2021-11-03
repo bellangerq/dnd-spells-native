@@ -44,32 +44,32 @@ function SpellDetails({
     <View style={styles.details}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.level}>{spellLevel}</Text>
-      <View style={styles.data}>
+      <View style={styles.dataList}>
         <View>
-          <Text>
-            • <Text style={styles.dataKey}>Casting time</Text>: {casting_time}
+          <Text style={styles.dataItem}>
+            • <Text style={styles.dataTitle}>Casting time</Text>: {casting_time}
           </Text>
         </View>
         <View>
-          <Text>
-            • <Text style={styles.dataKey}>Range</Text>: {range}
+          <Text style={styles.dataItem}>
+            • <Text style={styles.dataTitle}>Range</Text>: {range}
           </Text>
         </View>
         <View>
-          <Text>
-            • <Text style={styles.dataKey}>Components</Text>:{' '}
+          <Text style={styles.dataItem}>
+            • <Text style={styles.dataTitle}>Components</Text>:{' '}
             {components.join(', ') + (material ? ` (${material})` : '')}
           </Text>
         </View>
         <View>
-          <Text>
-            • <Text style={styles.dataKey}>Duration</Text>: {duration}
+          <Text style={styles.dataItem}>
+            • <Text style={styles.dataTitle}>Duration</Text>: {duration}
           </Text>
         </View>
       </View>
-      <Text>{desc[0]}</Text>
+      <Text style={styles.description}>{desc[0]}</Text>
       {desc.slice(1).map((descItem, index) => (
-        <Text key={index}>
+        <Text style={styles.description} key={index}>
           {/* Magic trick to indent as `textIndent` is not supported */}
           {'\t'}
           {descItem}
@@ -171,17 +171,24 @@ const styles = StyleSheet.create({
     padding: 8
   },
   level: {
+    fontSize: 18,
     fontStyle: 'italic'
   },
   name: {
     fontSize: 20,
     fontWeight: 'bold'
   },
-  data: {
+  dataList: {
     marginVertical: 16
   },
-  dataKey: {
+  dataItem: {
+    fontSize: 18
+  },
+  dataTitle: {
     color: themeColor,
     fontWeight: 'bold'
+  },
+  description: {
+    fontSize: 18
   }
 })
